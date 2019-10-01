@@ -1,2 +1,3 @@
-*.pyc
+.dockerignore
 __pycache__
+*.pyc

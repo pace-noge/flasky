@@ -42,5 +42,14 @@ def user(name):
     return render_template("user.html", name=name) 
 
 
+
+def create_app(settings_overrider=None):
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = "hard guess string"
+    bootstrap = Bootstrap(app)
+    moment = Moment(app)
+
+    return app
+
 if __name__ == "__main__":
     app.run(debug=True)
