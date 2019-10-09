@@ -3,6 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from . import auth
 from ..models import User
 from ..email import send_email
+from .. import db
 from .forms import LoginForm, RegistrationForm
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -67,11 +68,12 @@ def confirm(token):
 
 @auth.before_app_request
 def before_request():
-    if current_user.is_authenticated \
-       and not current_user.confirmed \
-       and request.blueprint != 'auth' \
-       and request.endpoint != 'static':
-        return redirect(url_for('auth.unconfirmed'))
+    if current_user.is_authenticated:
+        current_user.ping()
+        if not current_user.confirmed \
+           and request.blueprint != 'auth' \
+           and request.endpoint != 'static':
+            return redirect(url_for('auth.unconfirmed'))
 
 
 @auth.route('/unconfirmed')
